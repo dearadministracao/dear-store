@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Administração | DEAR,</title>
+  <style>
+    :root {
+      --wine: #722b3b;
+      --cream: #faf7f4;
+      --ink: #262222;
+      --muted: #756b6b;
+      --line: #e8dfdc;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      background: var(--cream);
+      color: var(--ink);
+      font: 16px Arial, sans-serif;
+    }
+    header {
+      background: var(--wine);
+      color: white;
+      padding: 22px 18px;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 26px;
+    }
+    header p {
+      margin: 6px 0 0;
+      font-size: 13px;
+    }
+    main {
+      max-width: 850px;
+      margin: 24px auto;
+      padding: 0 16px 40px;
+    }
+    section {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 18px;
+    }
+    h2 {
+      font-size: 19px;
+      margin: 0 0 16px;
+    }
+    label {
+      display: block;
+      font-size: 13px;
+      margin: 12px 0 6px;
+    }
+    input:not([type="checkbox"]), textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #d8cecb;
+      border-radius: 7px;
+      background: white;
+      color: var(--ink);
+      font: inherit;
+    }
+    textarea {
+      min-height: 75px;
+      resize: vertical;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    button {
+      border: 0;
+      border-radius: 7px;
+      padding: 12px 15px;
+      margin-top: 14px;
+      background: var(--wine);
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button.secondary {
+      background: #eee7e4;
+      color: var(--ink);
+    }
+    button.danger {
+      background: #8c3030;
+    }
+    button.small {
+      padding: 9px 11px;
+      margin: 8px 6px 0 0;
+      font-size: 13px;
+    }
+    button:disabled {
+      opacity: 0.6;
+    }
+    .status {
+      font-size: 14px;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+    .muted {
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .product {
+      border-top: 1px solid var(--line);
+      padding: 14px 0;
+    }
+    .product h3 {
+      margin: 0 0 6px;
+      font-size: 16px;
+    }
+    .product p {
+      margin: 5px 0;
+      font-size: 14px;
+    }
+    .hidden {
+      display: none !important;
+    }
+    @media (max-width: 520px) {
+      .grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+      section {
+        padding: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>DEAR,</h1>
+    <p>Made to care. · Painel administrativo</p>
+  </header>
+  <main>
+    <section id="loginSection">
+      <h2>Acesso administrativo</h2>
+      <p class="muted">
+        Entre com o e-mail e a senha cadastrados no Supabase.
+      </p>
+  <form id="loginForm">
+    <label for="email">E-mail</label>
+    <input
+      id="email"
+      type="email"
+      autocomplete="username"
+      required
+    >
+    <label for="password">Senha</label>
+    <input
+      id="password"
+      type="password"
+      autocomplete="current-password"
+      required
+    >
+    <button type="submit">Entrar</button>
+  </form>
+  <p id="loginStatus" class="status" role="status"></p>
+</section>
+<div id="adminArea" class="hidden">
+  <section>
+    <h2>Produtos e estoque</h2>
+    <p class="muted">
+      Cadastre os produtos individuais que serão usados nos kits.
+    </p>
+    <button id="logoutButton" class="secondary" type="button">
+      Sair da conta
+    </button>
+  </section>
+  <section>
+    <h2 id="formTitle">Cadastrar produto</h2>
+    <form id="productForm">
+      <input id="productId" type="hidden">
+      <label for="name">Nome do produto</label>
+      <input id="name" maxlength="150" required>
+      <label for="description">Descrição</label>
+      <textarea id="description" maxlength="1000"></textarea>
+      <div class="grid">
+        <div>
+          <label for="costPrice">Custo unitário (R$)</label>
+          <input
+            id="costPrice"
+            type="number"
+            min="0"
+            step="0.01"
+            value="0"
+            required
+          >
+        </div>
+        <div>
+          <label for="salePrice">Preço de venda unitário (R$)</label>
+          <input
+            id="salePrice"
+            type="number"
+            min="0"
+            step="0.01"
+            value="0"
+            required
+          >
+        </div>
+      </div>
+      <label for="stock">Quantidade em estoque</label>
+      <input
+        id="stock"
+        type="number"
+        min="0"
+        step="1"
+        value="0"
+        required
+      >
+      <label>
+        <input
+          id="active"
+          type="checkbox"
+          checked
+          style="width:auto"
+        >
+        Produto ativo
+      </label>
+      <button type="submit" id="saveButton">
+        Salvar produto
+      </button>
+      <button
+        type="button"
+        id="cancelButton"
+        class="secondary hidden"
+      >
+        Cancelar edição
+      </button>
+      <p id="formStatus" class="status" role="status"></p>
+    </form>
+  </section>
+  <section>
+    <h2>Produtos cadastrados</h2>
+    <button id="refreshButton" class="secondary" type="button">
+      Atualizar lista
+    </button>
+    <p id="listStatus" class="status" role="status"></p>
+    <div id="productList"></div>
+  </section>
+</div>
+  </main>
+  <script type="module">
+    import { createClient } from
+      'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+    const SUPABASE_URL =
+      'https://tfqksmhwumnjvfjoxavj.supabase.co';
+    const SUPABASE_PUBLISHABLE_KEY =
+      'sb_publishable_-2mMLVDYefI-ytu2m7vMTQ_QCIbYdHK';
+    const supabase = createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY
+    );
+    const $ = (id) => document.getElementById(id);
+    let currentUser = null;
+    function message(id, text) {
+      $(id).textContent = text;
+    }
+    function money(value) {
+      return Number(value || 0).toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+      });
+    }
+    function showAdmin(user) {
+      currentUser = user;
+      $('loginSection').classList.add('hidden');
+      $('adminArea').classList.remove('hidden');
+      loadProducts();
+    }
+    function showLogin() {
+      currentUser = null;
+      $('loginSection').classList.remove('hidden');
+      $('adminArea').classList.add('hidden');
+    }
+    $('loginForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      message('loginStatus', 'Verificando acesso...');
+      const { data, error } =
+        await supabase.auth.signInWithPassword({
+          email: $('email').value.trim(),
+          password: $('password').value
+        });
+      if (error) {
+        message(
+          'loginStatus',
+          'Não foi possível entrar. Confira o e-mail e a senha.'
+        );
+        return;
+      }
+      message('loginStatus', '');
+      showAdmin(data.user);
+    });
+    $('logoutButton').addEventListener('click', async () => {
+      await supabase.auth.signOut();
+      showLogin();
+      message('loginStatus', 'Você saiu da sua conta.');
+    });
+    $('productForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (!currentUser) {
+        message('formStatus', 'Entre novamente para continuar.');
+        return;
+      }
+      const id = $('productId').value;
+      const product = {
+        name: $('name').value.trim(),
+        description: $('description').value.trim() || null,
+        cost_price: Number($('costPrice').value),
+        sale_price: Number($('salePrice').value),
+        stock_quantity: Number($('stock').value),
+        active: $('active').checked
+      };
+      if (
+        !product.name ||
+        !Number.isFinite(product.cost_price) ||
+        product.cost_price < 0 ||
+        !Number.isFinite(product.sale_price) ||
+        product.sale_price < 0 ||
+        !Number.isInteger(product.stock_quantity) ||
+        product.stock_quantity < 0
+      ) {
+        message(
+          'formStatus',
+          'Confira os campos e os valores informados.'
+        );
+        return;
+      }
+      $('saveButton').disabled = true;
+      message('formStatus', 'Salvando...');
+      const result = id
+        ? await supabase
+            .from('products')
+            .update(product)
+            .eq('id', id)
+        : await supabase
+            .from('products')
+            .insert(product);
+      $('saveButton').disabled = false;
+      if (result.error) {
+        message(
+          'formStatus',
+          'Não foi possível salvar. Verifique as permissões do banco de dados e tente novamente.'
+        );
+        return;
+      }
+      message('formStatus', 'Produto salvo com sucesso.');
+      resetForm();
+      await loadProducts();
+    });
+    function resetForm() {
+      $('productForm').reset();
+      $('productId').value = '';
+      $('costPrice').value = '0';
+      $('salePrice').value = '0';
+      $('stock').value = '0';
+      $('active').checked = true;
+      $('formTitle').textContent = 'Cadastrar produto';
+      $('saveButton').textContent = 'Salvar produto';
+      $('cancelButton').classList.add('hidden');
+    }
+    $('cancelButton').addEventListener('click', resetForm);
+    $('refreshButton').addEventListener('click', loadProducts);
+    async function loadProducts() {
+      if (!currentUser) return;
+      message('listStatus', 'Carregando produtos...');
+      $('productList').replaceChildren();
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .order('created_at', { ascending: false });
+      if (error) {
+        message(
+          'listStatus',
+          'Não foi possível carregar os produtos. Verifique as configurações de acesso à API e as permissões.'
+        );
+        return;
+      }
+      if (!data.length) {
+        message('listStatus', 'Nenhum produto cadastrado ainda.');
+        return;
+      }
+      message('listStatus', '');
+      for (const product of data) {
+        const item = document.createElement('div');
+        item.className = 'product';
+        const title = document.createElement('h3');
+        title.textContent = product.name;
+        const description = document.createElement('p');
+        description.textContent =
+          product.description || 'Sem descrição';
+        const details = document.createElement('p');
+        details.textContent =
+          `Custo: ${money(product.cost_price)} · Venda: ${money(product.sale_price)} · Estoque: ${product.stock_quantity}`;
+        const status = document.createElement('p');
+        status.className = 'muted';
+        status.textContent = product.active ? 'Ativo' : 'Inativo';
+        const edit = document.createElement('button');
+        edit.className = 'small';
+        edit.type = 'button';
+        edit.textContent = 'Editar';
+        edit.addEventListener('click', () => {
+          $('productId').value = product.id;
+          $('name').value = product.name;
+          $('description').value = product.description || '';
+          $('costPrice').value = product.cost_price;
+          $('salePrice').value = product.sale_price;
+          $('stock').value = product.stock_quantity;
+          $('active').checked = product.active;
+          $('formTitle').textContent = 'Editar produto';
+          $('saveButton').textContent = 'Salvar alterações';
+          $('cancelButton').classList.remove('hidden');
+          $('formStatus').textContent = '';
+          $('productForm').scrollIntoView({
+            behavior: 'smooth'
+          });
+        });
+        const remove = document.createElement('button');
+        remove.className = 'small danger';
+        remove.type = 'button';
+        remove.textContent = 'Excluir';
+        remove.addEventListener('click', async () => {
+          if (!confirm(`Excluir "${product.name}"?`)) return;
+          const { error: deleteError } = await supabase
+            .from('products')
+            .delete()
+            .eq('id', product.id);
+          if (deleteError) {
+            message('listStatus', 'Não foi possível excluir o produto.');
+            return;
+          }
+          message('listStatus', 'Produto excluído.');
+          await loadProducts();
+        });
+        item.append(
+          title,
+          description,
+          details,
+          status,
+          edit,
+          remove
+        );
+        $('productList').append(item);
+      }
+    }
+    const { data: sessionData } =
+      await supabase.auth.getSession();
+    if (sessionData.session) {
+      showAdmin(sessionData.session.user);
+    }
+  </script>
+</body>
+</html>
