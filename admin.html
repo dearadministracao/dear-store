@@ -3,457 +3,834 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#722b3b">
   <title>Administração | DEAR,</title>
   <style>
     :root {
       --wine: #722b3b;
-      --cream: #faf7f4;
-      --ink: #262222;
+      --wine-dark: #511c29;
+      --cream: #faf6f0;
+      --white: #ffffff;
+      --text: #292323;
       --muted: #756b6b;
-      --line: #e8dfdc;
+      --border: #e8ded9;
+      --danger: #a52b36;
+      --success: #286747;
     }
     * {
       box-sizing: border-box;
     }
     body {
       margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
       background: var(--cream);
-      color: var(--ink);
-      font: 16px Arial, sans-serif;
+      color: var(--text);
     }
-    header {
-      background: var(--wine);
-      color: white;
-      padding: 22px 18px;
+    button,
+    input,
+    textarea {
+      font: inherit;
     }
-    header h1 {
-      margin: 0;
-      font-size: 26px;
+    button {
+      cursor: pointer;
     }
-    header p {
+    .topbar {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 18px 20px;
+    }
+    .topbar-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .brand-logo {
+      display: block;
+      width: 145px;
+      max-width: 55%;
+      height: auto;
+      object-fit: contain;
+    }
+    .brand-caption {
       margin: 6px 0 0;
-      font-size: 13px;
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
     }
-    main {
-      max-width: 850px;
-      margin: 24px auto;
-      padding: 0 16px 40px;
+    .container {
+      width: min(100% - 32px, 1100px);
+      margin: 32px auto;
     }
-    section {
-      background: white;
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 18px;
+    h1 {
+      font-size: clamp(25px, 5vw, 34px);
+      margin: 0 0 8px;
+      color: var(--wine);
     }
     h2 {
-      font-size: 19px;
-      margin: 0 0 16px;
+      font-size: 20px;
+      margin: 0 0 18px;
+    }
+    .subtitle {
+      color: var(--muted);
+      margin: 0 0 26px;
+      line-height: 1.5;
+    }
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      margin-bottom: 22px;
+      box-shadow: 0 4px 18px rgba(60, 25, 35, 0.04);
+    }
+    .login-card {
+      max-width: 460px;
+      margin: 45px auto;
+    }
+    .field {
+      margin-bottom: 16px;
     }
     label {
       display: block;
-      font-size: 13px;
-      margin: 12px 0 6px;
+      margin-bottom: 7px;
+      font-size: 14px;
+      font-weight: 600;
     }
-    input:not([type="checkbox"]), textarea {
+    input,
+    textarea {
+      display: block;
       width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 8px;
       padding: 12px;
-      border: 1px solid #d8cecb;
-      border-radius: 7px;
-      background: white;
-      color: var(--ink);
-      font: inherit;
+      background: #fff;
+      color: var(--text);
+      outline: none;
+    }
+    input:focus,
+    textarea:focus {
+      border-color: var(--wine);
+      box-shadow: 0 0 0 3px rgba(114, 43, 59, 0.10);
     }
     textarea {
-      min-height: 75px;
+      min-height: 85px;
       resize: vertical;
     }
     .grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
     }
-    button {
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       border: 0;
-      border-radius: 7px;
-      padding: 12px 15px;
-      margin-top: 14px;
+      border-radius: 8px;
+      padding: 12px 16px;
       background: var(--wine);
       color: white;
-      font-weight: bold;
-      cursor: pointer;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s;
     }
-    button.secondary {
-      background: #eee7e4;
-      color: var(--ink);
+    .button:hover {
+      background: var(--wine-dark);
     }
-    button.danger {
-      background: #8c3030;
+    .button:disabled {
+      opacity: 0.6;
+      cursor: wait;
     }
-    button.small {
-      padding: 9px 11px;
-      margin: 8px 6px 0 0;
+    .button-secondary {
+      background: #eee6e2;
+      color: var(--text);
+    }
+    .button-secondary:hover {
+      background: #e2d5d0;
+    }
+    .button-danger {
+      background: var(--danger);
+    }
+    .button-danger:hover {
+      background: #7f2029;
+    }
+    .button-small {
+      padding: 8px 10px;
       font-size: 13px;
     }
-    button:disabled {
-      opacity: 0.6;
+    .full-width {
+      width: 100%;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
     }
     .status {
+      display: none;
+      padding: 12px 14px;
+      border-radius: 8px;
+      margin: 0 0 18px;
       font-size: 14px;
       line-height: 1.5;
       overflow-wrap: anywhere;
     }
-    .muted {
-      color: var(--muted);
-      font-size: 13px;
+    .status.visible {
+      display: block;
+    }
+    .status.error {
+      background: #fbeaec;
+      color: #84232c;
+    }
+    .status.success {
+      background: #e8f4ec;
+      color: var(--success);
+    }
+    .status.info {
+      background: #f0eaf3;
+      color: #593b65;
+    }
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+    .toolbar h2 {
+      margin: 0;
+    }
+    .product-list {
+      display: grid;
+      gap: 12px;
     }
     .product {
-      border-top: 1px solid var(--line);
-      padding: 14px 0;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
     }
-    .product h3 {
+    .product-info {
+      min-width: 0;
+      flex: 1;
+    }
+    .product-name {
       margin: 0 0 6px;
-      font-size: 16px;
+      font-weight: 700;
+      overflow-wrap: anywhere;
     }
-    .product p {
-      margin: 5px 0;
+    .product-description {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+      margin: 0 0 10px;
+      overflow-wrap: anywhere;
+    }
+    .product-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 14px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .pill {
+      display: inline-block;
+      border-radius: 30px;
+      padding: 4px 9px;
+      font-size: 12px;
+      font-weight: 700;
+      background: #eee6e2;
+      color: var(--text);
+    }
+    .pill.active {
+      background: #e8f4ec;
+      color: var(--success);
+    }
+    .pill.inactive {
+      background: #fbeaec;
+      color: #84232c;
+    }
+    .empty {
+      color: var(--muted);
+      text-align: center;
+      padding: 28px 12px;
+      border: 1px dashed var(--border);
+      border-radius: 10px;
+    }
+    .checkbox-line {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin: 4px 0 18px;
       font-size: 14px;
     }
-    .hidden {
+    .checkbox-line input {
+      width: auto;
+      margin: 0;
+    }
+    .checkbox-line label {
+      margin: 0;
+    }
+    .footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      padding: 10px 0 28px;
+    }
+    [hidden] {
       display: none !important;
     }
-    @media (max-width: 520px) {
+    @media (max-width: 650px) {
+      .container {
+        width: min(100% - 22px, 1100px);
+        margin: 22px auto;
+      }
+      .card {
+        padding: 17px;
+      }
       .grid {
         grid-template-columns: 1fr;
         gap: 0;
       }
-      section {
-        padding: 16px;
+      .product {
+        flex-direction: column;
+      }
+      .product .actions {
+        width: 100%;
+      }
+      .product .button {
+        flex: 1;
+      }
+      .topbar {
+        padding: 15px 12px;
       }
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>DEAR,</h1>
-    <p>Made to care. · Painel administrativo</p>
-  </header>
-  <main>
-    <section id="loginSection">
-      <h2>Acesso administrativo</h2>
-      <p class="muted">
-        Entre com o e-mail e a senha cadastrados no Supabase.
-      </p>
-  <form id="loginForm">
-    <label for="email">E-mail</label>
-    <input
-      id="email"
-      type="email"
-      autocomplete="username"
-      required
-    >
-    <label for="password">Senha</label>
-    <input
-      id="password"
-      type="password"
-      autocomplete="current-password"
-      required
-    >
-    <button type="submit">Entrar</button>
-  </form>
-  <p id="loginStatus" class="status" role="status"></p>
-</section>
-<div id="adminArea" class="hidden">
-  <section>
-    <h2>Produtos e estoque</h2>
-    <p class="muted">
-      Cadastre os produtos individuais que serão usados nos kits.
-    </p>
-    <button id="logoutButton" class="secondary" type="button">
-      Sair da conta
-    </button>
-  </section>
-  <section>
-    <h2 id="formTitle">Cadastrar produto</h2>
-    <form id="productForm">
-      <input id="productId" type="hidden">
-      <label for="name">Nome do produto</label>
-      <input id="name" maxlength="150" required>
-      <label for="description">Descrição</label>
-      <textarea id="description" maxlength="1000"></textarea>
-      <div class="grid">
-        <div>
-          <label for="costPrice">Custo unitário (R$)</label>
-          <input
-            id="costPrice"
-            type="number"
-            min="0"
-            step="0.01"
-            value="0"
-            required
-          >
-        </div>
-        <div>
-          <label for="salePrice">Preço de venda unitário (R$)</label>
-          <input
-            id="salePrice"
-            type="number"
-            min="0"
-            step="0.01"
-            value="0"
-            required
-          >
-        </div>
-      </div>
-      <label for="stock">Quantidade em estoque</label>
-      <input
-        id="stock"
-        type="number"
-        min="0"
-        step="1"
-        value="0"
-        required
-      >
-      <label>
-        <input
-          id="active"
-          type="checkbox"
-          checked
-          style="width:auto"
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div>
+        <img
+          class="brand-logo"
+          src="./7F329F3D-1642-4AC1-B5E9-6C3BFEBD8FD9.png"
+          alt="DEAR, — logo oficial"
         >
-        Produto ativo
-      </label>
-      <button type="submit" id="saveButton">
-        Salvar produto
+        <p class="brand-caption">Made to care.</p>
+      </div>
+      <button id="logoutButton" class="button button-secondary" hidden>
+        Sair
       </button>
-      <button
-        type="button"
-        id="cancelButton"
-        class="secondary hidden"
-      >
-        Cancelar edição
-      </button>
-      <p id="formStatus" class="status" role="status"></p>
-    </form>
-  </section>
-  <section>
-    <h2>Produtos cadastrados</h2>
-    <button id="refreshButton" class="secondary" type="button">
-      Atualizar lista
-    </button>
-    <p id="listStatus" class="status" role="status"></p>
-    <div id="productList"></div>
-  </section>
-</div>
+    </div>
+  </header>
+  <main class="container">
+    <section id="loginSection" class="card login-card">
+      <h1>Área administrativa</h1>
+      <p class="subtitle">
+        Entre para administrar os produtos e o estoque da DEAR.
+      </p>
+      <div id="loginStatus" class="status" role="status" aria-live="polite"></div>
+      <form id="loginForm">
+        <div class="field">
+          <label for="email">E-mail cadastrado</label>
+          <input
+            id="email"
+            type="email"
+            autocomplete="username"
+            placeholder="seu@email.com"
+            required
+          >
+        </div>
+        <div class="field">
+          <label for="password">Senha</label>
+          <input
+            id="password"
+            type="password"
+            autocomplete="current-password"
+            placeholder="Digite sua senha"
+            required
+          >
+        </div>
+        <button id="loginButton" class="button full-width" type="submit">
+          Entrar
+        </button>
+      </form>
+    </section>
+    <section id="adminSection" hidden>
+      <h1>Olá! Vamos cuidar da DEAR.</h1>
+      <p class="subtitle">
+        Gerencie seus produtos, preços e quantidades em estoque.
+      </p>
+      <div id="adminStatus" class="status" role="status" aria-live="polite"></div>
+      <section class="card">
+        <h2 id="formTitle">Cadastrar produto</h2>
+        <form id="productForm">
+          <input id="productId" type="hidden">
+          <div class="field">
+            <label for="productName">Nome do produto *</label>
+            <input
+              id="productName"
+              type="text"
+              maxlength="150"
+              placeholder="Ex.: Hidratante corporal"
+              required
+            >
+          </div>
+          <div class="field">
+            <label for="productDescription">Descrição</label>
+            <textarea
+              id="productDescription"
+              maxlength="2000"
+              placeholder="Detalhes do produto (opcional)"
+            ></textarea>
+          </div>
+          <div class="grid">
+            <div class="field">
+              <label for="costPrice">Custo unitário (R$) *</label>
+              <input
+                id="costPrice"
+                type="number"
+                min="0"
+                max="99999999"
+                step="0.01"
+                value="0.00"
+                required
+              >
+            </div>
+            <div class="field">
+              <label for="salePrice">Preço de venda (R$) *</label>
+              <input
+                id="salePrice"
+                type="number"
+                min="0"
+                max="99999999"
+                step="0.01"
+                value="0.00"
+                required
+              >
+            </div>
+          </div>
+          <div class="field">
+            <label for="stockQuantity">Quantidade em estoque *</label>
+            <input
+              id="stockQuantity"
+              type="number"
+              min="0"
+              max="2147483647"
+              step="1"
+              value="0"
+              required
+            >
+          </div>
+          <div class="checkbox-line">
+            <input id="productActive" type="checkbox" checked>
+            <label for="productActive">Produto ativo</label>
+          </div>
+          <div class="actions">
+            <button id="saveButton" class="button" type="submit">
+              Salvar produto
+            </button>
+            <button
+              id="cancelEditButton"
+              class="button button-secondary"
+              type="button"
+              hidden
+            >
+              Cancelar edição
+            </button>
+          </div>
+        </form>
+      </section>
+      <section class="card">
+        <div class="toolbar">
+          <h2>Produtos cadastrados</h2>
+          <button id="refreshButton" class="button button-secondary" type="button">
+            Atualizar lista
+          </button>
+        </div>
+        <div id="productList" class="product-list">
+          <p class="empty">Carregando produtos...</p>
+        </div>
+      </section>
+    </section>
   </main>
+  <footer class="footer">
+    DEAR, — Made to care.
+  </footer>
   <script type="module">
     import { createClient } from
-      'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
-    const SUPABASE_URL =
-      'https://tfqksmhwumnjvfjoxavj.supabase.co';
+      "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+    const SUPABASE_URL = "https://tfqksmhwumnjvfjoxavj.supabase.co";
     const SUPABASE_PUBLISHABLE_KEY =
-      'sb_publishable_-2mMLVDYefI-ytu2m7vMTQ_QCIbYdHK';
+      "sb_publishable_-2mMLVDYefI-ytu2m7vMTQ_QCIbYdHK";
     const supabase = createClient(
       SUPABASE_URL,
       SUPABASE_PUBLISHABLE_KEY
     );
-    const $ = (id) => document.getElementById(id);
-    let currentUser = null;
-    function message(id, text) {
-      $(id).textContent = text;
+    const loginSection = document.getElementById("loginSection");
+    const adminSection = document.getElementById("adminSection");
+    const loginForm = document.getElementById("loginForm");
+    const productForm = document.getElementById("productForm");
+    const loginButton = document.getElementById("loginButton");
+    const saveButton = document.getElementById("saveButton");
+    const logoutButton = document.getElementById("logoutButton");
+    const cancelEditButton = document.getElementById("cancelEditButton");
+    const refreshButton = document.getElementById("refreshButton");
+    const productList = document.getElementById("productList");
+    const loginStatus = document.getElementById("loginStatus");
+    const adminStatus = document.getElementById("adminStatus");
+    const fields = {
+      id: document.getElementById("productId"),
+      name: document.getElementById("productName"),
+      description: document.getElementById("productDescription"),
+      cost: document.getElementById("costPrice"),
+      sale: document.getElementById("salePrice"),
+      stock: document.getElementById("stockQuantity"),
+      active: document.getElementById("productActive")
+    };
+    function showStatus(element, message, type = "info") {
+      element.textContent = message;
+      element.className = `status visible ${type}`;
     }
-    function money(value) {
-      return Number(value || 0).toLocaleString('pt-BR', {
-        style: 'currency',
-        currency: 'BRL'
+    function clearStatus(element) {
+      element.textContent = "";
+      element.className = "status";
+    }
+    function formatCurrency(value) {
+      return Number(value || 0).toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL"
       });
     }
-    function showAdmin(user) {
-      currentUser = user;
-      $('loginSection').classList.add('hidden');
-      $('adminArea').classList.remove('hidden');
-      loadProducts();
+    function formatError(error) {
+      if (!error) return "Ocorreu um erro inesperado.";
+      return error.message || String(error);
     }
-    function showLogin() {
-      currentUser = null;
-      $('loginSection').classList.remove('hidden');
-      $('adminArea').classList.add('hidden');
+    function setLoggedIn(isLoggedIn) {
+      loginSection.hidden = isLoggedIn;
+      adminSection.hidden = !isLoggedIn;
+      logoutButton.hidden = !isLoggedIn;
     }
-    $('loginForm').addEventListener('submit', async (event) => {
-      event.preventDefault();
-      message('loginStatus', 'Verificando acesso...');
-      const { data, error } =
-        await supabase.auth.signInWithPassword({
-          email: $('email').value.trim(),
-          password: $('password').value
-        });
-      if (error) {
-        message(
-          'loginStatus',
-          'Não foi possível entrar. Confira o e-mail e a senha.'
-        );
-        return;
-      }
-      message('loginStatus', '');
-      showAdmin(data.user);
-    });
-    $('logoutButton').addEventListener('click', async () => {
-      await supabase.auth.signOut();
-      showLogin();
-      message('loginStatus', 'Você saiu da sua conta.');
-    });
-    $('productForm').addEventListener('submit', async (event) => {
-      event.preventDefault();
-      if (!currentUser) {
-        message('formStatus', 'Entre novamente para continuar.');
-        return;
-      }
-      const id = $('productId').value;
-      const product = {
-        name: $('name').value.trim(),
-        description: $('description').value.trim() || null,
-        cost_price: Number($('costPrice').value),
-        sale_price: Number($('salePrice').value),
-        stock_quantity: Number($('stock').value),
-        active: $('active').checked
-      };
-      if (
-        !product.name ||
-        !Number.isFinite(product.cost_price) ||
-        product.cost_price < 0 ||
-        !Number.isFinite(product.sale_price) ||
-        product.sale_price < 0 ||
-        !Number.isInteger(product.stock_quantity) ||
-        product.stock_quantity < 0
-      ) {
-        message(
-          'formStatus',
-          'Confira os campos e os valores informados.'
-        );
-        return;
-      }
-      $('saveButton').disabled = true;
-      message('formStatus', 'Salvando...');
-      const result = id
-        ? await supabase
-            .from('products')
-            .update(product)
-            .eq('id', id)
-        : await supabase
-            .from('products')
-            .insert(product);
-      $('saveButton').disabled = false;
-      if (result.error) {
-        message(
-          'formStatus',
-          'Não foi possível salvar. Verifique as permissões do banco de dados e tente novamente.'
-        );
-        return;
-      }
-      message('formStatus', 'Produto salvo com sucesso.');
-      resetForm();
-      await loadProducts();
-    });
-    function resetForm() {
-      $('productForm').reset();
-      $('productId').value = '';
-      $('costPrice').value = '0';
-      $('salePrice').value = '0';
-      $('stock').value = '0';
-      $('active').checked = true;
-      $('formTitle').textContent = 'Cadastrar produto';
-      $('saveButton').textContent = 'Salvar produto';
-      $('cancelButton').classList.add('hidden');
-    }
-    $('cancelButton').addEventListener('click', resetForm);
-    $('refreshButton').addEventListener('click', loadProducts);
-    async function loadProducts() {
-      if (!currentUser) return;
-      message('listStatus', 'Carregando produtos...');
-      $('productList').replaceChildren();
+    async function verifyAdmin(user) {
+      if (!user) return false;
       const { data, error } = await supabase
-        .from('products')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .from("admin_users")
+        .select("user_id")
+        .eq("user_id", user.id)
+        .maybeSingle();
       if (error) {
-        message(
-          'listStatus',
-          'Não foi possível carregar os produtos. Verifique as configurações de acesso à API e as permissões.'
+        throw error;
+      }
+      return Boolean(data);
+    }
+    async function loadProducts() {
+      clearStatus(adminStatus);
+      productList.replaceChildren();
+      const loading = document.createElement("p");
+      loading.className = "empty";
+      loading.textContent = "Carregando produtos...";
+      productList.appendChild(loading);
+      const { data, error } = await supabase
+        .from("products")
+        .select("*")
+        .order("created_at", { ascending: false });
+      if (error) {
+        productList.replaceChildren();
+        showStatus(
+          adminStatus,
+          "Não foi possível carregar os produtos. " + formatError(error),
+          "error"
         );
         return;
       }
-      if (!data.length) {
-        message('listStatus', 'Nenhum produto cadastrado ainda.');
+      renderProducts(data || []);
+    }
+    function renderProducts(products) {
+      productList.replaceChildren();
+      if (products.length === 0) {
+        const empty = document.createElement("p");
+        empty.className = "empty";
+        empty.textContent = "Nenhum produto cadastrado ainda.";
+        productList.appendChild(empty);
         return;
       }
-      message('listStatus', '');
-      for (const product of data) {
-        const item = document.createElement('div');
-        item.className = 'product';
-        const title = document.createElement('h3');
-        title.textContent = product.name;
-        const description = document.createElement('p');
+      products.forEach((product) => {
+        const card = document.createElement("article");
+        card.className = "product";
+        const info = document.createElement("div");
+        info.className = "product-info";
+        const name = document.createElement("h3");
+        name.className = "product-name";
+        name.textContent = product.name;
+        const description = document.createElement("p");
+        description.className = "product-description";
         description.textContent =
-          product.description || 'Sem descrição';
-        const details = document.createElement('p');
-        details.textContent =
-          `Custo: ${money(product.cost_price)} · Venda: ${money(product.sale_price)} · Estoque: ${product.stock_quantity}`;
-        const status = document.createElement('p');
-        status.className = 'muted';
-        status.textContent = product.active ? 'Ativo' : 'Inativo';
-        const edit = document.createElement('button');
-        edit.className = 'small';
-        edit.type = 'button';
-        edit.textContent = 'Editar';
-        edit.addEventListener('click', () => {
-          $('productId').value = product.id;
-          $('name').value = product.name;
-          $('description').value = product.description || '';
-          $('costPrice').value = product.cost_price;
-          $('salePrice').value = product.sale_price;
-          $('stock').value = product.stock_quantity;
-          $('active').checked = product.active;
-          $('formTitle').textContent = 'Editar produto';
-          $('saveButton').textContent = 'Salvar alterações';
-          $('cancelButton').classList.remove('hidden');
-          $('formStatus').textContent = '';
-          $('productForm').scrollIntoView({
-            behavior: 'smooth'
-          });
-        });
-        const remove = document.createElement('button');
-        remove.className = 'small danger';
-        remove.type = 'button';
-        remove.textContent = 'Excluir';
-        remove.addEventListener('click', async () => {
-          if (!confirm(`Excluir "${product.name}"?`)) return;
-          const { error: deleteError } = await supabase
-            .from('products')
-            .delete()
-            .eq('id', product.id);
-          if (deleteError) {
-            message('listStatus', 'Não foi possível excluir o produto.');
-            return;
-          }
-          message('listStatus', 'Produto excluído.');
-          await loadProducts();
-        });
-        item.append(
-          title,
-          description,
-          details,
-          status,
-          edit,
-          remove
+          product.description || "Sem descrição cadastrada.";
+        const meta = document.createElement("div");
+        meta.className = "product-meta";
+        const cost = document.createElement("span");
+        cost.textContent = "Custo: " + formatCurrency(product.cost_price);
+        const sale = document.createElement("span");
+        sale.textContent = "Venda: " + formatCurrency(product.sale_price);
+        const stock = document.createElement("span");
+        stock.textContent = "Estoque: " + product.stock_quantity;
+        const status = document.createElement("span");
+        status.className = "pill " + (product.active ? "active" : "inactive");
+        status.textContent = product.active ? "Ativo" : "Inativo";
+        meta.append(cost, sale, stock, status);
+        info.append(name, description, meta);
+        const actions = document.createElement("div");
+        actions.className = "actions";
+        const editButton = document.createElement("button");
+        editButton.type = "button";
+        editButton.className = "button button-secondary button-small";
+        editButton.textContent = "Editar";
+        editButton.addEventListener("click", () => startEdit(product));
+        const deleteButton = document.createElement("button");
+        deleteButton.type = "button";
+        deleteButton.className = "button button-danger button-small";
+        deleteButton.textContent = "Excluir";
+        deleteButton.addEventListener("click", () => deleteProduct(product));
+        actions.append(editButton, deleteButton);
+        card.append(info, actions);
+        productList.appendChild(card);
+      });
+    }
+    function startEdit(product) {
+      fields.id.value = product.id;
+      fields.name.value = product.name || "";
+      fields.description.value = product.description || "";
+      fields.cost.value = Number(product.cost_price || 0).toFixed(2);
+      fields.sale.value = Number(product.sale_price || 0).toFixed(2);
+      fields.stock.value = product.stock_quantity ?? 0;
+      fields.active.checked = Boolean(product.active);
+      document.getElementById("formTitle").textContent = "Editar produto";
+      saveButton.textContent = "Salvar alterações";
+      cancelEditButton.hidden = false;
+      clearStatus(adminStatus);
+      productForm.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    }
+    function resetProductForm() {
+      productForm.reset();
+      fields.id.value = "";
+      fields.cost.value = "0.00";
+      fields.sale.value = "0.00";
+      fields.stock.value = "0";
+      fields.active.checked = true;
+      document.getElementById("formTitle").textContent = "Cadastrar produto";
+      saveButton.textContent = "Salvar produto";
+      cancelEditButton.hidden = true;
+    }
+    productForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      clearStatus(adminStatus);
+      const name = fields.name.value.trim();
+      const description = fields.description.value.trim();
+      const cost = Number(fields.cost.value);
+      const sale = Number(fields.sale.value);
+      const stock = Number(fields.stock.value);
+      if (!name) {
+        showStatus(adminStatus, "Informe o nome do produto.", "error");
+        return;
+      }
+      if (
+        !Number.isFinite(cost) || cost < 0 ||
+        !Number.isFinite(sale) || sale < 0
+      ) {
+        showStatus(
+          adminStatus,
+          "Confira os valores de custo e venda.",
+          "error"
         );
-        $('productList').append(item);
+        return;
+      }
+      if (!Number.isSafeInteger(stock) || stock < 0) {
+        showStatus(
+          adminStatus,
+          "A quantidade em estoque deve ser um número inteiro igual ou maior que zero.",
+          "error"
+        );
+        return;
+      }
+      const productData = {
+        name,
+        description: description || null,
+        cost_price: cost,
+        sale_price: sale,
+        stock_quantity: stock,
+        active: fields.active.checked
+      };
+      saveButton.disabled = true;
+      saveButton.textContent = "Salvando...";
+      try {
+        let result;
+        if (fields.id.value) {
+          result = await supabase
+            .from("products")
+            .update(productData)
+            .eq("id", fields.id.value)
+            .select("id")
+            .maybeSingle();
+        } else {
+          result = await supabase
+            .from("products")
+            .insert(productData)
+            .select("id")
+            .single();
+        }
+        if (result.error) throw result.error;
+        if (!result.data) {
+          throw new Error(
+            "Nenhuma alteração foi confirmada. Confira suas permissões de administrador."
+          );
+        }
+        resetProductForm();
+        showStatus(
+          adminStatus,
+          "Produto salvo com sucesso!",
+          "success"
+        );
+        await loadProducts();
+      } catch (error) {
+        showStatus(
+          adminStatus,
+          "Não foi possível salvar o produto. " + formatError(error),
+          "error"
+        );
+      } finally {
+        saveButton.disabled = false;
+        saveButton.textContent = fields.id.value
+          ? "Salvar alterações"
+          : "Salvar produto";
+      }
+    });
+    async function deleteProduct(product) {
+      const confirmed = window.confirm(
+        `Tem certeza de que deseja excluir "${product.name}"? Essa ação não pode ser desfeita.`
+      );
+      if (!confirmed) return;
+      clearStatus(adminStatus);
+      const { data, error } = await supabase
+        .from("products")
+        .delete()
+        .eq("id", product.id)
+        .select("id");
+      if (error) {
+        showStatus(
+          adminStatus,
+          "Não foi possível excluir o produto. " + formatError(error),
+          "error"
+        );
+        return;
+      }
+      if (!data || data.length === 0) {
+        showStatus(
+          adminStatus,
+          "O produto não foi excluído. Confira suas permissões de administrador.",
+          "error"
+        );
+        return;
+      }
+      if (fields.id.value === product.id) {
+        resetProductForm();
+      }
+      showStatus(adminStatus, "Produto excluído.", "success");
+      await loadProducts();
+    }
+    cancelEditButton.addEventListener("click", () => {
+      resetProductForm();
+      clearStatus(adminStatus);
+    });
+    refreshButton.addEventListener("click", loadProducts);
+    loginForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      clearStatus(loginStatus);
+      loginButton.disabled = true;
+      loginButton.textContent = "Entrando...";
+      try {
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password
+        });
+        if (error) throw error;
+        const isAdmin = await verifyAdmin(data.user);
+        if (!isAdmin) {
+          await supabase.auth.signOut();
+          showStatus(
+            loginStatus,
+            "Este usuário não tem acesso administrativo cadastrado.",
+            "error"
+          );
+          return;
+        }
+        setLoggedIn(true);
+        resetProductForm();
+        await loadProducts();
+      } catch (error) {
+        showStatus(
+          loginStatus,
+          "Não foi possível entrar. Confira o e-mail, a senha e as configurações do Supabase. " +
+          formatError(error),
+          "error"
+        );
+      } finally {
+        loginButton.disabled = false;
+        loginButton.textContent = "Entrar";
+      }
+    });
+    logoutButton.addEventListener("click", async () => {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        showStatus(
+          adminStatus,
+          "Não foi possível sair. " + formatError(error),
+          "error"
+        );
+        return;
+      }
+      setLoggedIn(false);
+      resetProductForm();
+      loginForm.reset();
+      clearStatus(loginStatus);
+      clearStatus(adminStatus);
+    });
+    async function initialize() {
+      setLoggedIn(false);
+      try {
+        const { data, error } = await supabase.auth.getSession();
+        if (error) throw error;
+        const user = data.session?.user;
+        if (!user) return;
+        const isAdmin = await verifyAdmin(user);
+        if (!isAdmin) {
+          await supabase.auth.signOut();
+          return;
+        }
+        setLoggedIn(true);
+        await loadProducts();
+      } catch (error) {
+        showStatus(
+          loginStatus,
+          "Não foi possível verificar a sessão. " + formatError(error),
+          "error"
+        );
       }
     }
-    const { data: sessionData } =
-      await supabase.auth.getSession();
-    if (sessionData.session) {
-      showAdmin(sessionData.session.user);
-    }
+    initialize();
   </script>
 </body>
 </html>
