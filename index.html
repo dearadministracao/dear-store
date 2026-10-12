@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#6B1F32">
+  <meta name="description" content="DEAR — Made to care. Presentes pensados para transformar carinho em memória.">
+  <title>DEAR, — Made to care.</title>
+  <style>
+    :root {
+      --wine: #6B1F32;
+      --cream: #F8F5F0;
+      --black: #242020;
+      --muted: #766B68;
+      --white: #FFFFFF;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: Georgia, "Times New Roman", serif;
+      background: var(--cream);
+      color: var(--black);
+      line-height: 1.6;
+    }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+    header {
+      padding: 22px 6%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 1px solid #e8dfd9;
+      background: var(--cream);
+    }
+    .brand img {
+      display: block;
+      width: 115px;
+      max-height: 70px;
+      object-fit: contain;
+    }
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 16px;
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+    }
+    nav a:hover {
+      color: var(--wine);
+    }
+    .hero {
+      min-height: 490px;
+      padding: 75px 8%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .eyebrow {
+      font-family: Arial, sans-serif;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--wine);
+      margin-bottom: 22px;
+    }
+    h1 {
+      font-size: clamp(42px, 8vw, 76px);
+      font-weight: normal;
+      line-height: 1.08;
+      max-width: 800px;
+    }
+    h1 em {
+      color: var(--wine);
+      font-weight: normal;
+    }
+    .hero p {
+      max-width: 410px;
+      margin: 25px 0 30px;
+      color: var(--muted);
+      font-size: 16px;
+    }
+    .button {
+      display: inline-block;
+      background: var(--wine);
+      color: var(--white);
+      padding: 14px 28px;
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      transition: opacity 0.2s;
+    }
+    .button:hover {
+      opacity: 0.85;
+    }
+    .collections {
+      padding: 65px 6% 80px;
+      background: var(--white);
+      text-align: center;
+    }
+    .section-title {
+      font-size: 38px;
+      font-weight: normal;
+      margin-bottom: 12px;
+    }
+    .section-description {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 40px;
+    }
+    .collection-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .collection {
+      min-height: 185px;
+      padding: 25px 12px;
+      background: var(--cream);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      border: 1px solid #eee5df;
+      transition: border-color 0.2s;
+    }
+    .collection:hover {
+      border-color: var(--wine);
+    }
+    .collection-number {
+      font-family: Arial, sans-serif;
+      color: var(--wine);
+      font-size: 10px;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+    }
+    .collection h3 {
+      font-weight: normal;
+      font-size: 23px;
+    }
+    .collection p {
+      font-family: Arial, sans-serif;
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 8px;
+    }
+    .letter {
+      padding: 75px 8%;
+      text-align: center;
+      background: var(--wine);
+      color: var(--white);
+    }
+    .letter .eyebrow {
+      color: #E8C8CF;
+    }
+    .letter h2 {
+      font-size: clamp(30px, 5vw, 46px);
+      font-weight: normal;
+      max-width: 650px;
+      margin: 0 auto 20px;
+    }
+    .letter p {
+      color: #F0DDE1;
+      font-size: 14px;
+    }
+    footer {
+      padding: 32px 6%;
+      text-align: center;
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      color: var(--muted);
+    }
+    footer strong {
+      color: var(--wine);
+      font-weight: normal;
+    }
+    @media (max-width: 600px) {
+      header {
+        flex-direction: column;
+        padding: 18px 5%;
+      }
+      nav {
+        justify-content: center;
+        gap: 12px;
+      }
+      .hero {
+        min-height: 430px;
+        padding: 65px 7%;
+      }
+      .collection-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+      .collection {
+        min-height: 155px;
+      }
+      .collection h3 {
+        font-size: 20px;
+      }
+      .section-title {
+        font-size: 32px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="brand" href="#" aria-label="DEAR — página inicial">
+      <img
+        src="7F329F3D-1642-4AC1-B5E9-6C3BFEBD8FD9.png"
+        alt="DEAR — Made to care."
+      >
+    </a>
+    <nav aria-label="Navegação principal">
+      <a href="#colecoes">Coleções</a>
+      <a href="#sobre">Nossa essência</a>
+      <a href="#contato">Contato</a>
+    </nav>
+  </header>
+  <main>
+    <section class="hero">
+      <span class="eyebrow">DEAR, — Made to care.</span>
+      <h1>
+        Há carinho que merece<br>
+        ser guardado <em>para sempre.</em>
+      </h1>
+      <p>
+        Presentes pensados nos detalhes, preparados com carinho
+        para transformar pequenos gestos em memórias.
+      </p>
+      <a class="button" href="#colecoes">Descubra a DEAR</a>
+    </section>
+    <section class="collections" id="colecoes">
+      <span class="eyebrow">Encontre sua intenção</span>
+      <h2 class="section-title">Uma carta para cada carinho.</h2>
+      <p class="section-description">
+        Escolha para quem você quer tornar o dia especial.
+      </p>
+      <div class="collection-grid">
+        <a class="collection" href="#contato">
+          <span class="collection-number">01</span>
+          <h3>Dear me</h3>
+          <p>Um carinho para você.</p>
+        </a>
+        <a class="collection" href="#contato">
+          <span class="collection-number">02</span>
+          <h3>Dear Love</h3>
+          <p>Para quem mora no coração.</p>
+        </a>
+        <a class="collection" href="#contato">
+          <span class="collection-number">03</span>
+          <h3>Dear mommy</h3>
+          <p>Amor em forma de cuidado.</p>
+        </a>
+        <a class="collection" href="#contato">
+          <span class="collection-number">04</span>
+          <h3>Dear friend</h3>
+          <p>Para celebrar a amizade.</p>
+        </a>
+        <a class="collection" href="#contato" style="grid-column: 1 / -1;">
+          <span class="collection-number">05</span>
+          <h3>Your Way</h3>
+          <p>Seu presente, do seu jeito.</p>
+        </a>
+      </div>
+    </section>
+    <section class="letter" id="sobre">
+      <span class="eyebrow">Made to care.</span>
+      <h2>Porque cuidar também é uma forma de dizer eu te amo.</h2>
+      <p>
+        Cada detalhe importa. Cada escolha conta uma história.
+        E cada presente pode carregar um pouco de você.
+      </p>
+    </section>
+  </main>
+  <footer id="contato">
+    <p><strong>DEAR,</strong> — Made to care.</p>
+    <p>Um presente pensado com carinho.</p>
+    <p style="margin-top: 12px;">© 2026 DEAR. Todos os direitos reservados.</p>
+  </footer>
+</body>
+</html>
