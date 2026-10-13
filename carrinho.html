@@ -325,6 +325,76 @@
         Continuar para finalizar
       </button>
 
+      <div id="checkoutForm" hidden style="margin-top: 24px;">
+        <h2 style="font-weight: normal; font-size: 26px; margin-bottom: 18px;">
+          Para quem vai esse presente?
+        </h2>
+
+        <form id="customerForm">
+          <label for="customerName">Nome completo</label>
+          <input id="customerName" name="name" type="text" autocomplete="name" required
+            style="display:block;width:100%;padding:12px;margin:6px 0 14px;border:1px solid #E8DFD9;">
+
+          <label for="customerEmail">E-mail</label>
+          <input id="customerEmail" name="email" type="email" autocomplete="email" required
+            style="display:block;width:100%;padding:12px;margin:6px 0 14px;border:1px solid #E8DFD9;">
+
+          <label for="customerPhone">Celular com DDD</label>
+          <input id="customerPhone" name="phone" type="tel" autocomplete="tel" required
+            placeholder="(15) 99999-9999"
+            style="display:block;width:100%;padding:12px;margin:6px 0 14px;border:1px solid #E8DFD9;">
+
+          <h2 style="font-weight:normal;font-size:26px;margin:22px 0 18px;">
+            Onde entregar?
+          </h2>
+
+          <label for="customerZip">CEP</label>
+          <input id="customerZip" name="postal_code" type="text" autocomplete="postal-code"
+            inputmode="numeric" required placeholder="00000-000"
+            style="display:block;width:100%;padding:12px;margin:6px 0 14px;border:1px solid #E8DFD9;">
+
+          <label for="customerState">Estado (UF)</label>
+          <input id="customerState" name="state" type="text" autocomplete="address-level1"
+            maxlength="2" required placeholder="SP"
+            style="display:block;width:100%;padding:12px;margin:6px 0 14px;border:1px solid #E8DFD9;">
+
+          <label for="customerCity">Cidade</label>
+          <input id="customerCity" name="city" type="text" autocomplete="address-level2" required
+            style="display:block;width:100%;padding:12px;margin:6px 0 14px;border:1px solid #E8DFD9;">
+
+          <label for="customerNeighborhood">Bairro</label>
+          <input id="customerNeighborhood" name="neighborhood" type="text" required
+            style="display:block;width:100%;padding:12px;margin:6px 0 14px;border:1px solid #E8DFD9;">
+
+          <label for="customerStreet">Rua ou avenida</label>
+          <input id="customerStreet" name="street" type="text" autocomplete="street-address" required
+            style="display:block;width:100%;padding:12px;margin:6px 0 14px;border:1px solid #E8DFD9;">
+
+          <label for="customerNumber">Número</label>
+          <input id="customerNumber" name="number" type="text" required
+            style="display:block;width:100%;padding:12px;margin:6px 0 14px;border:1px solid #E8DFD9;">
+
+          <label for="customerComplement">Complemento (opcional)</label>
+          <input id="customerComplement" name="complement" type="text"
+            style="display:block;width:100%;padding:12px;margin:6px 0 18px;border:1px solid #E8DFD9;">
+
+          <label for="paymentMethod">Forma de pagamento</label>
+          <select id="paymentMethod" name="payment_method" required
+            style="display:block;width:100%;padding:12px;margin:6px 0 18px;border:1px solid #E8DFD9;background:white;">
+            <option value="pix">Pix</option>
+            <option value="credit_card">Cartão de crédito</option>
+          </select>
+
+          <button id="submitOrderButton" class="button" type="submit">
+            Gerar pedido
+          </button>
+        </form>
+
+        <div id="paymentResult" hidden aria-live="polite"
+          style="margin-top:24px;overflow-wrap:anywhere;">
+        </div>
+      </div>
+
       <a class="secondary-button" href="index.html#catalogo">
         Continuar escolhendo
       </a>
