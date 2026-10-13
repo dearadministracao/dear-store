@@ -127,10 +127,60 @@
     }
 
     .price {
-      margin: 0 0 24px;
+      margin: 0 0 20px;
       color: var(--wine);
       font-size: 29px;
       font-weight: bold;
+    }
+
+    .cart-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: stretch;
+      max-width: 360px;
+    }
+
+    .add-cart-button {
+      width: 100%;
+      border: 1px solid var(--wine);
+      background: var(--wine);
+      color: white;
+      padding: 16px 20px;
+      font: 12px Arial, sans-serif;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s, opacity 0.2s;
+    }
+
+    .add-cart-button:hover {
+      background: var(--wine-dark);
+    }
+
+    .add-cart-button:disabled {
+      opacity: 0.65;
+      cursor: default;
+    }
+
+    .view-cart-link {
+      display: block;
+      padding: 12px;
+      text-align: center;
+      border: 1px solid var(--border);
+      color: var(--wine);
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    .view-cart-link:hover {
+      border-color: var(--wine);
+    }
+
+    .cart-feedback {
+      min-height: 24px;
+      color: var(--wine);
+      font-size: 13px;
     }
 
     .details {
@@ -213,6 +263,10 @@
       .product-visual {
         min-height: 250px;
       }
+
+      .cart-actions {
+        max-width: none;
+      }
     }
   </style>
 </head>
@@ -245,6 +299,7 @@
   <script>
     const SUPABASE_URL = "https://tfqksmhwumnjvfjoxavj.supabase.co";
     const SUPABASE_KEY = "sb_publishable_-2mMLVDYefI-ytu2m7vMTQ_QCIbYdHK";
+    const CART_KEY = "dear_cart_v1";
 
     const content = document.getElementById("product-content");
     const kitId = new URLSearchParams(window.location.search).get("id");
@@ -296,6 +351,58 @@
       };
 
       return labels[option] || "";
+    }
+
+    function addToCart(kit) {
+      const button = document.getElementById("addCartButton");
+      const feedback = document.getElementById("cartFeedback");
+
+      try {
+        let cart;
+
+        try {
+          cart = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
+        } catch {
+          cart = [];
+        }
+
+        if (!Array.isArray(cart)) {
+          cart = [];
+        }
+
+        const existingItem = cart.find(item => item.id === kit.id);
+
+        if (existingItem) {
+          existingItem.quantity =
+            (Number(existingItem.quantity) || 0) + 1;
+        } else {
+          cart.push({
+            id: kit.id,
+            quantity: 1
+          });
+        }
+
+        localStorage.setItem(CART_KEY, JSON.stringify(cart));
+
+        feedback.textContent = "Kit adicionado ao carrinho!";
+        button.textContent = "Adicionado ✓";
+
+        const cartLink = document.getElementById("viewCartLink");
+        cartLink.textContent = "Ver carrinho (" +
+          cart.reduce((sum, item) => sum + item.quantity, 0) +
+          ")";
+
+        button.disabled = true;
+
+        setTimeout(() => {
+          button.disabled = false;
+          button.textContent = "Adicionar ao carrinho";
+        }, 1500);
+      } catch (error) {
+        console.error("Erro ao salvar o carrinho:", error);
+        feedback.textContent =
+          "Não foi possível salvar o item. Verifique as configurações do navegador.";
+      }
     }
 
     async function loadKit() {
@@ -378,14 +485,18 @@
       visualLogo.className = "visual-logo";
       visualLogo.src = logoPath;
       visualLogo.alt = "DEAR,";
+
       visualLogo.onerror = function () {
         this.style.display = "none";
+
         const fallback = document.createElement("span");
         fallback.textContent = "DEAR,";
         fallback.style.cssText =
           "color:#6b1f32;font-family:Georgia,serif;font-size:52px;";
+
         visual.appendChild(fallback);
       };
+
       visual.appendChild(visualLogo);
 
       const info = document.createElement("div");
@@ -398,6 +509,31 @@
       }
 
       addText(info, "p", "price", formatPrice(kit.sale_price));
+
+      // Botões para adicionar o kit e acessar o carrinho.
+      const cartActions = document.createElement("div");
+      cartActions.className = "cart-actions";
+
+      const addButton = document.createElement("button");
+      addButton.type = "button";
+      addButton.id = "addCartButton";
+      addButton.className = "add-cart-button";
+      addButton.textContent = "Adicionar ao carrinho";
+      addButton.addEventListener("click", () => addToCart(kit));
+
+      const feedback = document.createElement("p");
+      feedback.id = "cartFeedback";
+      feedback.className = "cart-feedback";
+      feedback.setAttribute("aria-live", "polite");
+
+      const cartLink = document.createElement("a");
+      cartLink.id = "viewCartLink";
+      cartLink.className = "view-cart-link";
+      cartLink.href = "carrinho.html";
+      cartLink.textContent = "Ver carrinho";
+
+      cartActions.append(addButton, feedback, cartLink);
+      info.appendChild(cartActions);
 
       const details = document.createElement("section");
       details.className = "details";
