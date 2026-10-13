@@ -185,7 +185,82 @@
       color: var(--wine);
       font-weight: normal;
     }
-    @media (max-width: 600px) {
+ 
+.catalog {
+  padding: 65px 6% 80px;
+  background: var(--cream);
+  text-align: center;
+}
+
+.catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.kit-card {
+  background: var(--white);
+  border: 1px solid #e8dfd9;
+  padding: 26px 20px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.kit-card .kit-collection {
+  color: var(--wine);
+  font: 10px Arial, sans-serif;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.kit-card h3 {
+  font-size: 24px;
+  font-weight: normal;
+}
+
+.kit-card .kit-description {
+  color: var(--muted);
+  font: 13px Arial, sans-serif;
+  white-space: pre-line;
+}
+
+.kit-card .kit-details {
+  color: var(--muted);
+  font: 12px Arial, sans-serif;
+}
+
+.kit-card .kit-price {
+  color: var(--wine);
+  font-size: 24px;
+  margin-top: auto;
+  padding-top: 12px;
+}
+
+.catalog-message {
+  color: var(--muted);
+  font: 14px Arial, sans-serif;
+  padding: 25px 0;
+}
+
+@media (max-width: 600px) {
+  .catalog-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .kit-card {
+    padding: 18px 13px;
+  }
+
+  .kit-card h3 {
+    font-size: 19px;
+  }
+}
+   @media (max-width: 600px) {
       header {
         flex-direction: column;
         padding: 18px 5%;
@@ -275,7 +350,21 @@
         </a>
       </div>
     </section>
-    <section class="letter" id="sobre">
+ 
+<section class="catalog" id="catalogo">
+  <span class="eyebrow">Feitos para presentear</span>
+  <h2 class="section-title">Encontre seu carinho.</h2>
+  <p class="section-description">
+    Kits preparados para transformar cuidado em memória.
+  </p>
+
+  <div id="catalogMessage" class="catalog-message" aria-live="polite">
+    Carregando os kits...
+  </div>
+
+  <div id="catalogGrid" class="catalog-grid"></div>
+</section>
+ <section class="letter" id="sobre">
       <span class="eyebrow">Made to care.</span>
       <h2>Porque cuidar também é uma forma de dizer eu te amo.</h2>
       <p>
@@ -289,5 +378,76 @@
     <p>Um presente pensado com carinho.</p>
     <p style="margin-top: 12px;">© 2026 DEAR. Todos os direitos reservados.</p>
   </footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  (() => {
+    const SUPABASE_URL = "https://tfqksmhwumnjvfjoxavj.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_-2mMLVDYefI-ytu2m7vMTQ_QCIbYdHK";
+
+    const { createClient } = window.supabase;
+    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const grid = document.getElementById("catalogGrid");
+    const message = document.getElementById("catalogMessage");
+
+    const money = value => Number(value || 0).toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL"
+    });
+
+    function addText(parent, tag, className, value) {
+      const element = document.createElement(tag);
+      element.className = className;
+      element.textContent = value || "";
+      parent.appendChild(element);
+      return element;
+    }
+
+    async function loadCatalog() {
+      try {
+        const { data, error } = await supabase
+          .from("public_active_kits")
+          .select("id, name, collection, description, sale_price, size, variation")
+          .order("created_at", { ascending: false });
+
+        if (error) throw error;
+
+        grid.replaceChildren();
+
+        if (!data || data.length === 0) {
+          message.textContent =
+            "Estamos preparando nossos primeiros kits. Volte em breve.";
+          return;
+        }
+
+        message.textContent = "";
+
+        data.forEach(kit => {
+          const card = document.createElement("article");
+          card.className = "kit-card";
+
+          addText(card, "span", "kit-collection", kit.collection);
+          addText(card, "h3", "", kit.name);
+          addText(card, "p", "kit-description", kit.description);
+
+          const details = [kit.size, kit.variation].filter(Boolean).join(" · ");
+          if (details) {
+            addText(card, "p", "kit-details", details);
+          }
+
+          addText(card, "p", "kit-price", money(kit.sale_price));
+          grid.appendChild(card);
+        });
+      } catch (error) {
+        console.error("Erro ao carregar catálogo:", error);
+        message.textContent =
+          "Não foi possível carregar os kits agora. Tente novamente mais tarde.";
+      }
+    }
+
+    loadCatalog();
+  })();
+</script>
 </body>
 </html>
