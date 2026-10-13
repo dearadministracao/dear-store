@@ -672,13 +672,7 @@
         checkoutButton.hidden = true;
       });
 
-      paymentMethodSelect.value = "pix";
-      paymentMethodSelect.addEventListener("change", () => {
-        if (paymentMethodSelect.value === "credit_card") {
-          paymentMethodSelect.value = "pix";
-          showError("O pagamento por cartão ainda não está disponível. Escolha Pix.");
-        }
-      });
+
 
       customerForm.addEventListener("submit", async (event) => {
         event.preventDefault();
