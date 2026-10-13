@@ -430,6 +430,24 @@
           addText(card, "span", "kit-collection", kit.collection);
           addText(card, "h3", "", kit.name);
           addText(card, "p", "kit-description", kit.description);
+const componentsTitle = document.createElement("p");
+componentsTitle.className = "kit-details";
+componentsTitle.textContent = "Este kit contém:";
+card.appendChild(componentsTitle);
+
+const componentsList = document.createElement("ul");
+componentsList.style.paddingLeft = "18px";
+componentsList.style.fontFamily = "Arial, sans-serif";
+componentsList.style.fontSize = "13px";
+componentsList.style.color = "var(--muted)";
+
+(kit.components || []).forEach(item => {
+  const li = document.createElement("li");
+  li.textContent = `${item.quantity}x ${item.name}`;
+  componentsList.appendChild(li);
+});
+
+card.appendChild(componentsList);
 
           const details = [kit.size, kit.variation].filter(Boolean).join(" · ");
           if (details) {
