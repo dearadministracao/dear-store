@@ -655,13 +655,168 @@
         renderCart();
       }
 
-      document.getElementById("checkoutButton").addEventListener("click", () => {
-        showError(
-          "A finalização de pedidos ainda está sendo preparada. Seus itens continuam salvos no carrinho."
-        );
+      
+      const checkoutButton = document.getElementById("checkoutButton");
+      const checkoutForm = document.getElementById("checkoutForm");
+      const customerForm = document.getElementById("customerForm");
+      const paymentResult = document.getElementById("paymentResult");
+      const paymentMethodSelect = document.getElementById("paymentMethod");
+      const submitOrderButton = document.getElementById("submitOrderButton");
+
+      checkoutButton.addEventListener("click", () => {
+        checkoutForm.hidden = false;
+        checkoutForm.scrollIntoView({ behavior: "smooth", block: "start" });
+        checkoutButton.hidden = true;
+      });
+
+      paymentMethodSelect.value = "pix";
+      paymentMethodSelect.addEventListener("change", () => {
+        if (paymentMethodSelect.value === "credit_card") {
+          paymentMethodSelect.value = "pix";
+          showError("O pagamento por cartão ainda não está disponível. Escolha Pix.");
+        }
+      });
+
+      customerForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        errorMessage.hidden = true;
+        paymentResult.hidden = true;
+        paymentResult.replaceChildren();
+
+        const cart = getCart();
+        if (!cart.length) {
+          showError("Seu carrinho está vazio.");
+          return;
+        }
+
+        const formData = new FormData(customerForm);
+        const customer = {
+          name: formData.get("name").trim(),
+          email: formData.get("email").trim(),
+          phone: formData.get("phone").trim(),
+          postal_code: formData.get("postal_code").trim(),
+          state: formData.get("state").trim().toUpperCase(),
+          city: formData.get("city").trim(),
+          neighborhood: formData.get("neighborhood").trim(),
+          street: formData.get("street").trim(),
+          number: formData.get("number").trim(),
+          complement: formData.get("complement").trim()
+        };
+
+        submitOrderButton.disabled = true;
+        submitOrderButton.textContent = "Preparando pedido...";
+
+        try {
+          const response = await fetch(
+            `${SUPABASE_URL}/functions/v1/dear-checkout`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "apikey": SUPABASE_KEY,
+                "Authorization": `Bearer ${SUPABASE_KEY}`
+              },
+              body: JSON.stringify({
+                customer,
+                items: cart.map(item => ({
+                  kit_id: item.id,
+                  quantity: item.quantity
+                })),
+                payment_method: "pix"
+              })
+            }
+          );
+
+          const result = await response.json();
+
+          if (!response.ok) {
+            throw new Error(result.error || "Não foi possível gerar o pedido.");
+          }
+
+          paymentResult.hidden = false;
+
+          const title = createElement("h2", "", "Seu pedido foi criado");
+          title.style.font = "26px Georgia, serif";
+          title.style.marginBottom = "12px";
+          paymentResult.appendChild(title);
+
+          paymentResult.appendChild(
+            createElement("p", "", `Pedido: ${result.order_id}`)
+          );
+          paymentResult.appendChild(
+            createElement("p", "", `Total: ${money(result.total)}`)
+          );
+          paymentResult.appendChild(
+            createElement("p", "", "Status: aguardando confirmação do pagamento.")
+          );
+
+          if (result.pix?.qr_code_base64) {
+            const image = document.createElement("img");
+            image.alt = "QR Code Pix do pedido";
+            image.src = `data:image/png;base64,${result.pix.qr_code_base64}`;
+            image.style.display = "block";
+            image.style.maxWidth = "260px";
+            image.style.width = "100%";
+            image.style.margin = "20px auto";
+            paymentResult.appendChild(image);
+          }
+
+          if (result.pix?.qr_code) {
+            const label = createElement("p", "", "Código Pix para copiar:");
+            label.style.marginTop = "16px";
+            paymentResult.appendChild(label);
+
+            const code = document.createElement("textarea");
+            code.readOnly = true;
+            code.value = result.pix.qr_code;
+            code.rows = 4;
+            code.style.width = "100%";
+            code.style.padding = "10px";
+            code.style.margin = "8px 0";
+            paymentResult.appendChild(code);
+
+            const copyButton = createElement("button", "button", "Copiar código Pix");
+            copyButton.type = "button";
+            copyButton.style.marginBottom = "14px";
+            copyButton.addEventListener("click", async () => {
+              try {
+                await navigator.clipboard.writeText(code.value);
+                copyButton.textContent = "Código copiado";
+              } catch {
+                code.focus();
+                code.select();
+                showError("Selecione e copie o código Pix manualmente.");
+              }
+            });
+            paymentResult.appendChild(copyButton);
+          }
+
+          if (result.pix?.ticket_url) {
+            const ticketLink = createElement("a", "secondary-button", "Abrir página do Pix");
+            ticketLink.href = result.pix.ticket_url;
+            ticketLink.target = "_blank";
+            ticketLink.rel = "noopener noreferrer";
+            paymentResult.appendChild(ticketLink);
+          }
+
+          if (!result.pix?.qr_code && !result.pix?.qr_code_base64) {
+            paymentResult.appendChild(
+              createElement("p", "", "Não recebemos os dados do Pix. Não tente pagar; entre em contato com o suporte.")
+            );
+          }
+
+          paymentResult.scrollIntoView({ behavior: "smooth", block: "start" });
+        } catch (error) {
+          console.error("Erro no checkout:", error);
+          showError(error.message || "Erro ao enviar pedido. Tente novamente.");
+        } finally {
+          submitOrderButton.disabled = false;
+          submitOrderButton.textContent = "Gerar pedido";
+        }
       });
 
       renderCart();
+
     })();
   </script>
 </body>
