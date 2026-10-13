@@ -1,0 +1,415 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#6b1f32">
+  <title>Kit | DEAR,</title>
+  <meta name="description" content="Conheça os kits DEAR, feitos para cuidar de quem importa.">
+
+  <style>
+    :root {
+      --wine: #6b1f32;
+      --wine-dark: #481321;
+      --cream: #faf6f0;
+      --text: #242020;
+      --muted: #746b6b;
+      --border: #e8ded8;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--cream);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    header {
+      padding: 22px 6%;
+      border-bottom: 1px solid var(--border);
+      background: var(--cream);
+    }
+
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      color: var(--wine);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 30px;
+      font-weight: bold;
+      text-decoration: none;
+      letter-spacing: 1px;
+    }
+
+    .back-link {
+      color: var(--wine);
+      font-size: 14px;
+      text-decoration: none;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    main {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 45px 20px 70px;
+    }
+
+    .product-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    .product-visual {
+      min-height: 360px;
+      padding: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f0e6df;
+      border-radius: 4px;
+      text-align: center;
+    }
+
+    .visual-mark {
+      color: var(--wine);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(48px, 8vw, 76px);
+      letter-spacing: 2px;
+    }
+
+    .visual-caption {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      color: var(--wine);
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0 0 14px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(30px, 5vw, 44px);
+      font-weight: normal;
+      line-height: 1.2;
+    }
+
+    .description {
+      margin: 0 0 22px;
+      color: var(--muted);
+      white-space: pre-line;
+    }
+
+    .price {
+      margin: 0 0 24px;
+      color: var(--wine);
+      font-size: 29px;
+      font-weight: bold;
+    }
+
+    .details {
+      margin: 25px 0;
+      padding: 22px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .details h2 {
+      margin: 0 0 12px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 22px;
+      font-weight: normal;
+    }
+
+    .components {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    .components li {
+      margin: 7px 0;
+    }
+
+    .extra-detail {
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .message {
+      padding: 28px 20px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .message h1 {
+      font-size: 30px;
+      color: var(--text);
+    }
+
+    .message a {
+      display: inline-block;
+      margin-top: 12px;
+      color: var(--wine);
+    }
+
+    footer {
+      padding: 24px 20px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+    }
+
+    @media (max-width: 700px) {
+      header {
+        padding: 18px 20px;
+      }
+
+      .header-inner {
+        align-items: flex-start;
+      }
+
+      .brand {
+        font-size: 26px;
+      }
+
+      main {
+        padding: 28px 18px 50px;
+      }
+
+      .product-layout {
+        grid-template-columns: 1fr;
+        gap: 28px;
+      }
+
+      .product-visual {
+        min-height: 240px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="header-inner">
+      <a class="brand" href="index.html" aria-label="DEAR, página inicial">DEAR,</a>
+      <a class="back-link" href="index.html#catalogo">← Voltar à loja</a>
+    </div>
+  </header>
+
+  <main>
+    <section id="product-content" class="message" aria-live="polite">
+      Carregando os detalhes do kit...
+    </section>
+  </main>
+
+  <footer>
+    DEAR, — Made to care.
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = "https://tfqksmhwumnjvfjoxavj.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_-2mMLVDYefI-ytu2m7vMTQ_QCIbYdHK";
+
+    const supabase = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+    const content = document.getElementById("product-content");
+    const kitId = new URLSearchParams(window.location.search).get("id");
+
+    function showMessage(title, message) {
+      content.className = "message";
+      content.replaceChildren();
+
+      const heading = document.createElement("h1");
+      heading.textContent = title;
+
+      const paragraph = document.createElement("p");
+      paragraph.textContent = message;
+
+      const link = document.createElement("a");
+      link.href = "index.html#catalogo";
+      link.textContent = "Voltar para os kits";
+
+      content.append(heading, paragraph, link);
+    }
+
+    function addText(parent, tag, className, text) {
+      const element = document.createElement(tag);
+      if (className) element.className = className;
+      element.textContent = text;
+      parent.appendChild(element);
+      return element;
+    }
+
+    function formatPrice(value) {
+      return Number(value).toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL"
+      });
+    }
+
+    function letterLabel(option) {
+      const labels = {
+        template: "Carta da DEAR,",
+        custom: "Carta personalizada",
+        none: "Sem carta"
+      };
+
+      return labels[option] || "";
+    }
+
+    async function loadKit() {
+      if (!kitId) {
+        showMessage(
+          "Qual kit você procura?",
+          "Volte à loja e escolha um dos kits disponíveis."
+        );
+        return;
+      }
+
+      const { data: kit, error } = await supabase
+        .from("public_active_kits")
+        .select(
+          "id, name, collection, description, sale_price, size, variation, letter_option, petal_colors, components"
+        )
+        .eq("id", kitId)
+        .maybeSingle();
+
+      if (error) {
+        console.error("Erro ao carregar o kit:", error);
+        showMessage(
+          "Não foi possível carregar este kit",
+          "Tente novamente em instantes ou volte à loja."
+        );
+        return;
+      }
+
+      if (!kit) {
+        showMessage(
+          "Kit não encontrado",
+          "Este kit pode não estar disponível no momento."
+        );
+        return;
+      }
+
+      content.className = "";
+      content.replaceChildren();
+
+      const layout = document.createElement("div");
+      layout.className = "product-layout";
+
+      const visual = document.createElement("div");
+      visual.className = "product-visual";
+
+      const visualContent = document.createElement("div");
+      const mark = addText(visualContent, "div", "visual-mark", "DEAR,");
+      const caption = addText(
+        visualContent,
+        "span",
+        "visual-caption",
+        "Made to care."
+      );
+
+      visual.appendChild(visualContent);
+
+      const info = document.createElement("div");
+
+      addText(info, "p", "eyebrow", kit.collection || "Coleção DEAR");
+      addText(info, "h1", "", kit.name || "Kit DEAR");
+
+      if (kit.description) {
+        addText(info, "p", "description", kit.description);
+      }
+
+      addText(info, "p", "price", formatPrice(kit.sale_price));
+
+      const details = document.createElement("section");
+      details.className = "details";
+      addText(details, "h2", "", "O que vem no kit");
+
+      const list = document.createElement("ul");
+      list.className = "components";
+
+      if (Array.isArray(kit.components) && kit.components.length) {
+        kit.components.forEach(item => {
+          const li = document.createElement("li");
+          const quantity = Number(item.quantity) || 1;
+          li.textContent = `${quantity}x ${item.name}`;
+          list.appendChild(li);
+        });
+      } else {
+        addText(details, "p", "", "Os itens deste kit serão informados em breve.");
+      }
+
+      if (list.children.length) {
+        details.appendChild(list);
+      }
+
+      if (kit.size) {
+        addText(details, "p", "extra-detail", `Tamanho: ${kit.size}`);
+      }
+
+      if (kit.variation) {
+        addText(details, "p", "extra-detail", `Variação: ${kit.variation}`);
+      }
+
+      const letter = letterLabel(kit.letter_option);
+      if (letter) {
+        addText(details, "p", "extra-detail", `Opção de carta: ${letter}`);
+      }
+
+      if (Array.isArray(kit.petal_colors) && kit.petal_colors.length) {
+        addText(
+          details,
+          "p",
+          "extra-detail",
+          `Cores de pétalas disponíveis: ${kit.petal_colors.join(", ")}`
+        );
+      }
+
+      info.appendChild(details);
+      layout.append(visual, info);
+      content.appendChild(layout);
+
+      document.title = `${kit.name} | DEAR,`;
+    }
+
+    loadKit();
+  </script>
+</body>
+</html>
