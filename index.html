@@ -408,7 +408,7 @@
       try {
         const { data, error } = await supabase
           .from("public_active_kits")
-          .select("id, name, collection, description, sale_price, size, variation")
+          .select("id, name, collection, description, sale_price, size, variation, components")
           .order("name", { ascending: true });
 
         if (error) throw error;
